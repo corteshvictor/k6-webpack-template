@@ -2,11 +2,11 @@ const path = require("path");
 
 module.exports = {
   mode: "production",
-  entry: "./getCharacter.js",
+  entry: "./index.js",
   output: {
     path: path.resolve(__dirname, "dist"),
     libraryTarget: "commonjs",
-    filename: "getCharacter.es5.js",
+    filename: "[name].es5.js",
   },
   module: {
     rules: [
