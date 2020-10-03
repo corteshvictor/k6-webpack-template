@@ -1,8 +1,9 @@
 import { group, check, fail } from "k6";
 import { Trend, Rate } from "k6/metrics";
 
-import loginPost from "./test_groups/loginPost";
-import getCharacter from "./test_groups/getCharacter";
+import loginPost from "./test_groups/loginPost.js";
+import getCharacter from "./test_groups/getCharacter.js";
+import config from "./config.js";
 
 export let rateErrors500 = new Rate("500 errors rate");
 export let resTimeLoginPost = new Trend("Response time - Login Post");
@@ -10,17 +11,18 @@ export let rateErrorsLoginPost = new Rate("Errors rate - Login Post");
 export let resTimeGetCharacter = new Trend("Response time - GET Character");
 export let rateErrorsGetCharacter = new Rate("Errors rate - GET Character");
 
+const {
+  stages,
+  thresholds: { trend, rate },
+} = config;
+
 export let options = {
-  stages: [
-    { duration: "10s", target: 2 },
-    { duration: "20s", target: 2 },
-    { duration: "20s", target: 0 },
-  ],
+  stages,
   thresholds: {
-    "Response time - Login Post": [{ threshold: "p(95) <= 30000" }],
-    "Errors rate - Login Post": [{ threshold: "rate <= 0.01" }],
-    "Response time - GET Character": [{ threshold: "p(95) <= 30000" }],
-    "Errors rate - GET Character": [{ threshold: "rate <= 0.01" }],
+    "Response time - Login Post": trend,
+    "Errors rate - Login Post": rate,
+    "Response time - GET Character": trend,
+    "Errors rate - GET Character": rate,
   },
 };
 
